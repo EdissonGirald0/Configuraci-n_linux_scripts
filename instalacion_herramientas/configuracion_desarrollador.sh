@@ -48,8 +48,6 @@ python3 -m venv ~/virtualenvs/datascience
 source ~/virtualenvs/datascience/bin/activate
 pip install --upgrade pip
 pip install numpy pandas matplotlib seaborn jupyterlab scipy statsmodels plotly
-pip install notebook ipykernel
-python -m ipykernel install --user --name=datascience
 deactivate
 
 # Entorno para Machine Learning
@@ -57,9 +55,7 @@ echo "🤖 Creando entorno virtual para Machine Learning..."
 python3 -m venv ~/virtualenvs/ml
 source ~/virtualenvs/ml/bin/activate
 pip install --upgrade pip
-pip install scikit-learn torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-pip install transformers tensorflow keras opencv-python
-python -m ipykernel install --user --name=ml
+pip install scikit-learn torch torchvision torchaudio tensorflow keras opencv-python
 deactivate
 
 # Entorno para Desarrollo Web
@@ -67,9 +63,7 @@ echo "🌐 Creando entorno virtual para Desarrollo Web..."
 python3 -m venv ~/virtualenvs/webdev
 source ~/virtualenvs/webdev/bin/activate
 pip install --upgrade pip
-pip install fastapi uvicorn sqlalchemy psycopg2-binary
-pip install django djangorestframework flask flask-sqlalchemy
-pip install python-jose[cryptography] passlib[bcrypt] python-multipart
+pip install fastapi uvicorn sqlalchemy django flask
 deactivate
 
 # Crear archivo de aliases para activar entornos virtuales
@@ -194,6 +188,12 @@ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] \
 https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
 sudo apt update
 sudo apt install -y code
+
+# Configurar extensiones útiles en VSCode
+echo "🧠 Configurando extensiones en VSCode..."
+code --install-extension ms-python.python
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
 
 # ================================
 # 🔄 Configurar Git

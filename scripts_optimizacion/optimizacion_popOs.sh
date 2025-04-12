@@ -1,12 +1,16 @@
 #!/bin/bash
 
-# Verificar si se ejecuta como root
+# Este script realiza optimizaciones avanzadas en Pop!_OS para desarrollo de software
+# Incluye mejoras de rendimiento, configuración de memoria y optimizaciones específicas
+# para herramientas de desarrollo como Docker, VSCode y entornos de compilación
+
+# Verificar privilegios de root (necesario para modificar configuraciones del sistema)
 if [ "$EUID" -ne 0 ]; then 
     echo "❌ Este script debe ejecutarse como root (sudo)"
     exit 1
 fi
 
-# Función para registro de logs
+# Configurar sistema de logs para rastrear cambios y facilitar la resolución de problemas
 log_file="/var/log/system_optimization.log"
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$log_file"
@@ -162,9 +166,12 @@ apt install -y htop iotop nmon nethogs
 # ================================
 log "Configurando optimizaciones para desarrollo..."
 
-# Aumentar límites del sistema para desarrollo
+# Aumentar límites del sistema para IDEs, Docker y herramientas de desarrollo
 cat >> /etc/security/limits.conf << EOF
 # Límites para desarrolladores
+# nofile: número máximo de archivos abiertos
+# nproc: número máximo de procesos
+# memlock: límite de memoria bloqueada para aplicaciones
 *               soft    nofile          65535
 *               hard    nofile          65535
 *               soft    nproc           65535
@@ -173,17 +180,17 @@ cat >> /etc/security/limits.conf << EOF
 *               hard    memlock         unlimited
 EOF
 
-# Optimizar Docker si está instalado
+# Optimizaciones específicas para Docker
 if command -v docker &> /dev/null; then
     log "Optimizando Docker..."
-    # Configurar daemon.json
+    # Configurar daemon.json con ajustes optimizados para desarrollo
     cat > /etc/docker/daemon.json << EOF
 {
-    "storage-driver": "overlay2",
-    "max-concurrent-downloads": 10,
-    "max-concurrent-uploads": 10,
+    "storage-driver": "overlay2",      # Driver más eficiente para desarrollo
+    "max-concurrent-downloads": 10,     # Aumenta descargas paralelas
+    "max-concurrent-uploads": 10,       # Aumenta subidas paralelas
     "default-ulimits": {
-        "nofile": {
+        "nofile": {                    # Límites de archivos para contenedores
             "Name": "nofile",
             "Hard": 64000,
             "Soft": 64000
@@ -194,28 +201,28 @@ EOF
     systemctl restart docker
 fi
 
-# Optimizar VSCode si está instalado
+# Optimizaciones para VSCode
 if command -v code &> /dev/null; then
     log "Optimizando VSCode..."
-    # Configurar watch settings para desarrollo
+    # Aumentar límite de vigilancia de archivos para grandes proyectos
     echo "fs.inotify.max_user_watches=524288" > /etc/sysctl.d/99-vscode.conf
     sysctl -p /etc/sysctl.d/99-vscode.conf
 fi
 
-# Optimizar memoria para IDEs y compiladores
+# Optimizar parámetros del kernel para IDEs y compilación
 cat >> /etc/sysctl.d/99-developer.conf << EOF
 # Optimizaciones para desarrollo
-vm.max_map_count=262144
-kernel.threads-max=4194304
+vm.max_map_count=262144              # Necesario para ElasticSearch y JVM
+kernel.threads-max=4194304           # Máximo número de hilos del sistema
 EOF
 
-# Configurar mejor rendimiento para compilación
+# Variables de entorno para optimizar compilación
 cat >> /etc/environment << EOF
 # Optimización para compilación
-MAKEFLAGS="-j\$(nproc)"
-JAVA_TOOL_OPTIONS="-Xmx4G"
+MAKEFLAGS="-j\$(nproc)"             # Usar todos los cores para compilación
+JAVA_TOOL_OPTIONS="-Xmx4G"          # Memoria máxima para herramientas Java
 GRADLE_OPTS="-Xmx4G -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true"
-MAVEN_OPTS="-Xmx4G"
+MAVEN_OPTS="-Xmx4G"                 # Memoria máxima para Maven
 EOF
 
 # ================================

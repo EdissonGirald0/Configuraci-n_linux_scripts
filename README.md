@@ -143,3 +143,105 @@ pip install -r requirements.txt
 cd ~/virtualenvs/webdev
 pip install -r requirements.txt
 ```
+
+### 🎯 Creación de Entornos por Proyecto
+
+#### 📊 Proyectos de Ciencia de Datos
+Para crear un nuevo entorno basado en el entorno base de datascience:
+
+```bash
+# 1. Crear directorio del proyecto
+mkdir ~/projects/datascience/mi_proyecto
+cd ~/projects/datascience/mi_proyecto
+
+# 2. Crear nuevo entorno virtual
+python3 -m venv .venv
+
+# 3. Activar el nuevo entorno
+source .venv/bin/activate
+
+# 4. Instalar dependencias desde el entorno base
+pip install -r ~/virtualenvs/datascience/requirements.txt
+
+# 5. Agregar dependencias específicas del proyecto
+pip install <paquetes_adicionales>
+
+# 6. Guardar las dependencias del proyecto
+pip freeze > requirements.txt
+```
+
+#### 🤖 Proyectos de Machine Learning
+Para proyectos de ML:
+
+```bash
+# 1. Crear estructura del proyecto
+mkdir -p ~/projects/ml/mi_proyecto
+cd ~/projects/ml/mi_proyecto
+
+# 2. Crear entorno virtual del proyecto
+python3 -m venv .venv
+source .venv/bin/activate
+
+# 3. Heredar configuración del entorno base
+pip install -r ~/virtualenvs/ml/requirements.txt
+
+# 4. Configurar kernel de Jupyter para el proyecto
+python -m ipykernel install --user --name=mi_proyecto_ml
+```
+
+#### 🌐 Proyectos Web
+Para proyectos web con Django/Flask:
+
+```bash
+# 1. Crear proyecto
+mkdir -p ~/projects/web/mi_proyecto
+cd ~/projects/web/mi_proyecto
+
+# 2. Crear entorno virtual
+python3 -m venv .venv
+source .venv/bin/activate
+
+# 3. Instalar dependencias base
+pip install -r ~/virtualenvs/webdev/requirements.txt
+
+# 4. Iniciar proyecto (ejemplo con Django)
+django-admin startproject config .
+```
+
+#### 🔄 Buenas Prácticas
+- Usar `.venv` dentro del proyecto para mejor portabilidad
+- Mantener un `requirements.txt` actualizado
+- Crear un `.gitignore` apropiado:
+```bash
+# Crear .gitignore básico
+cat > .gitignore << EOL
+.venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+EOL
+```
+
+#### 📝 Estructura Recomendada de Proyecto
+```
+mi_proyecto/
+├── .venv/                 # Entorno virtual del proyecto
+├── .gitignore            # Archivos a ignorar por git
+├── requirements.txt      # Dependencias del proyecto
+├── README.md            # Documentación
+└── src/                 # Código fuente
+    └── ...
+```
+
+#### 🔨 Scripts Útiles
+Crear un script de configuración para el proyecto:
+
+```bash
+#!/bin/bash
+# setup.sh
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pre-commit install  # Si usas pre-commit hooks
+```

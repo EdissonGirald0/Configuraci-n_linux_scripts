@@ -1,0 +1,62 @@
+# Ejemplo de configuración personalizada
+# Copia este archivo y personalízalo según tus necesidades
+
+system:
+  distribution: "pop_os"
+  backup_enabled: true
+  backup_retention_days: 7
+  log_level: "DEBUG"
+
+development:
+  python:
+    enabled: true
+    versions: ["3.11", "3.12"]
+    environments:
+      datascience:
+        enabled: true
+        packages:
+          - numpy
+          - pandas
+          - matplotlib
+          - seaborn
+          - jupyterlab
+      machine_learning:
+        enabled: true
+        packages:
+          - scikit-learn
+          - torch
+          - tensorflow
+          - transformers
+      web_development:
+        enabled: true
+        packages:
+          - fastapi
+          - uvicorn
+          - django
+          - flask
+
+  nodejs:
+    enabled: true
+    versions: ["lts"]
+    global_packages:
+      - yarn
+      - create-react-app
+      - typescript
+
+optimization:
+  memory:
+    swappiness: 5
+    vfs_cache_pressure: 30
+  network:
+    tcp_congestion_control: "bbr"
+  power_management:
+    tlp_enabled: true
+    cpu_governor_ac: "performance"
+    cpu_governor_bat: "powersave"
+
+monitoring:
+  grafana:
+    enabled: false
+  tools:
+    - htop
+    - iotop 

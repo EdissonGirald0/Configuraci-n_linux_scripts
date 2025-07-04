@@ -1,0 +1,172 @@
+# Configuración centralizada para scripts de configuración Linux
+# Archivo: config/config.yaml
+
+# Configuración general del sistema
+system:
+  distribution: "pop_os"
+  backup_enabled: true
+  backup_retention_days: 30
+  log_level: "INFO"
+  log_file: "/var/log/system_optimization.log"
+
+# Configuración de herramientas de desarrollo
+development:
+  python:
+    enabled: true
+    versions: ["3.9", "3.10", "3.11"]
+    environments:
+      datascience:
+        enabled: true
+        packages:
+          - numpy
+          - pandas
+          - matplotlib
+          - seaborn
+          - jupyterlab
+          - scipy
+          - statsmodels
+          - plotly
+      machine_learning:
+        enabled: true
+        packages:
+          - scikit-learn
+          - torch
+          - torchvision
+          - torchaudio
+          - tensorflow
+          - keras
+          - opencv-python
+      web_development:
+        enabled: true
+        packages:
+          - fastapi
+          - uvicorn
+          - sqlalchemy
+          - django
+          - flask
+
+  nodejs:
+    enabled: true
+    versions: ["lts", "latest"]
+    global_packages:
+      - yarn
+      - create-react-app
+      - "@vue/cli"
+      - typescript
+      - nodemon
+      - npm-check-updates
+
+  docker:
+    enabled: true
+    storage_driver: "overlay2"
+    max_concurrent_downloads: 10
+    max_concurrent_uploads: 10
+
+# Configuración de optimización del sistema
+optimization:
+  memory:
+    swappiness: 10
+    vfs_cache_pressure: 50
+    dirty_ratio: 10
+    dirty_background_ratio: 5
+    zram_enabled: true
+    zram_devices: 1
+
+  network:
+    tcp_congestion_control: "bbr"
+    tcp_fastopen: 3
+    somaxconn: 1024
+    rmem_max: 16777216
+    wmem_max: 16777216
+
+  filesystem:
+    inotify_max_watches: 524288
+    file_max: 2097152
+    trim_enabled: true
+
+  power_management:
+    tlp_enabled: true
+    cpu_governor_ac: "performance"
+    cpu_governor_bat: "powersave"
+    cpu_max_perf_ac: 100
+    cpu_max_perf_bat: 30
+
+# Configuración de herramientas de monitoreo
+monitoring:
+  grafana:
+    enabled: true
+    port: 3000
+    admin_password: "admin123"
+  
+  prometheus:
+    enabled: true
+    port: 9090
+
+  tools:
+    - htop
+    - iotop
+    - nethogs
+    - iftop
+
+# Configuración de servicios
+services:
+  disable_unnecessary:
+    - bluetooth
+    - avahi-daemon
+    - cups
+    - ModemManager
+    - whoopsie
+    - kerneloops
+
+# Configuración de límites del sistema
+limits:
+  nofile_soft: 65535
+  nofile_hard: 65535
+  nproc_soft: 65535
+  nproc_hard: 65535
+  memlock_soft: "unlimited"
+  memlock_hard: "unlimited"
+
+# Configuración de compilación
+compilation:
+  ccache_enabled: true
+  ccache_size: "50G"
+  makeflags: "-j$(nproc)"
+  java_memory: "4G"
+  gradle_memory: "4G"
+  maven_memory: "4G"
+
+# Configuración de GPU
+gpu:
+  nvidia:
+    driver_version: "535"
+    power_management: true
+    auto_boost: false
+    memory_clock: 2100
+    graphics_clock: 800
+  
+  amd:
+    vulkan_drivers: true
+    freesync: true
+
+# Configuración de IDE
+ide:
+  vscode:
+    enabled: true
+    extensions:
+      - ms-python.python
+      - dbaeumer.vscode-eslint
+      - esbenp.prettier-vscode
+    inotify_watches: 524288
+
+# Configuración de Git
+git:
+  user_name: "Tu Nombre"
+  user_email: "tuemail@ejemplo.com"
+  default_branch: "main"
+
+# Configuración de npm
+npm:
+  author_name: "Tu Nombre"
+  author_email: "tuemail@ejemplo.com"
+  license: "MIT" 

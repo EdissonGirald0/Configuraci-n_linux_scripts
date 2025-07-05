@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  test-environment:
+    build: .
+    container_name: linux-config-test
+    volumes:
+      - ../:/home/tester/project:ro
+      - ./test-data:/home/tester/test-data
+    environment:
+      - TEST_MODE=true
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  # Servicio adicional para pruebas de red
+  test-network:
+    image: nginx:alpine
+    container_name: test-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./test-data:/usr/share/nginx/html:ro 

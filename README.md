@@ -9,6 +9,7 @@ Este repositorio contiene scripts de automatización **completamente refactoriza
 - ⚙️ **Configuración YAML**: Personalización completa sin editar código
 - 🛡️ **Gestión de Errores Robusta**: Rollback automático y logging detallado
 - 🔧 **Funcionalidades Avanzadas**: Modo simulación, módulos selectivos, backup automático
+- 🧪 **Sistema de Pruebas**: Múltiples métodos para probar sin afectar el sistema
 
 ### 📁 **Estructura del Proyecto**
 ```
@@ -22,9 +23,110 @@ Configuración_linux_scripts/
 │   ├── python_setup.sh          # Configuración de Python
 │   ├── system_optimization.sh   # Optimización del sistema
 │   └── [otros módulos...]
+├── 📁 scripts/
+│   ├── test-system.sh           # Script principal de pruebas
+│   └── backup-system.sh         # Creación de snapshots
+├── 📁 docker-test/
+│   ├── Dockerfile               # Entorno de pruebas Docker
+│   ├── docker-compose.yml       # Configuración Docker
+│   ├── run-tests.sh             # Pruebas en contenedor
+│   └── README.md                # Documentación Docker
 ├── setup.sh                     # Script principal refactorizado
 ├── install_dependencies.sh      # Instalador de dependencias
-└── README.md      # Documentación completa
+└── README.md                    # Documentación completa
+```
+
+## 🧪 **Pruebas Seguras del Sistema**
+
+### 🚀 **Métodos de Prueba Disponibles**
+
+#### 1. **Modo Simulación (Recomendado)**
+```bash
+# Probar sin hacer cambios reales
+./scripts/test-system.sh dry-run
+
+# Probar módulos específicos
+./scripts/test-system.sh dry-run -m python,system
+
+# Modo verbose para más detalles
+./scripts/test-system.sh dry-run -v
+```
+
+#### 2. **Pruebas en Docker (Aislado)**
+```bash
+# Pruebas completas en contenedor
+./scripts/test-system.sh docker
+
+# Sin Docker si no está disponible
+./scripts/test-system.sh docker -d
+```
+
+#### 3. **Pruebas Seguras con Backup**
+```bash
+# Crear backup automático antes de pruebas
+./scripts/test-system.sh safe -m python
+
+# Sin crear backup
+./scripts/test-system.sh safe -n
+```
+
+#### 4. **Crear Backup Manual**
+```bash
+# Crear snapshot del sistema
+sudo ./scripts/backup-system.sh mi_backup
+
+# Backup con nombre automático
+sudo ./scripts/backup-system.sh
+```
+
+#### 5. **Pruebas Completas (Solo VM/Entorno Controlado)**
+```bash
+# ⚠️ ADVERTENCIA: Solo en entornos controlados
+./scripts/test-system.sh full
+```
+
+### 📋 **Tipos de Pruebas por Seguridad**
+
+| Método | Seguridad | Uso Recomendado | Cambios Reales |
+|--------|-----------|-----------------|----------------|
+| **dry-run** | 🟢 100% Seguro | Pruebas iniciales | ❌ No |
+| **docker** | 🟢 Aislado | Desarrollo y testing | ❌ No |
+| **backup** | 🟡 Con respaldo | Preparación | ✅ Sí |
+| **safe** | 🟡 Con confirmación | Sistema real | ✅ Sí |
+| **full** | 🔴 Completo | Solo VM/Controlado | ✅ Sí |
+
+### 🔧 **Uso Avanzado de Pruebas**
+
+#### Configuración Personalizada
+```bash
+# Usar configuración específica
+./scripts/test-system.sh dry-run -c config/mi_config.yaml
+
+# Probar módulos específicos con config personalizada
+./scripts/test-system.sh safe -m python -c config/test_config.yaml
+```
+
+#### Monitoreo de Pruebas
+```bash
+# Ver logs en tiempo real
+tail -f /var/log/system_optimization.log
+
+# Verificar estado de servicios
+systemctl status docker
+systemctl status tlp
+
+# Monitorear recursos
+htop
+nvidia-smi  # Si tienes GPU NVIDIA
+```
+
+#### Limpieza Post-Pruebas
+```bash
+# Limpiar contenedores Docker
+cd docker-test && docker-compose down --volumes
+
+# Limpiar backups antiguos (más de 30 días)
+find /root/system_backups -name "*.tar.gz" -mtime +30 -delete
 ```
 
 ## 🚀 **Instalación Rápida**
@@ -39,13 +141,25 @@ cd Configuraci-n_linux_scripts
 sudo ./install_dependencies.sh
 ```
 
-### 2. **Ejecutar Configuración Completa**
+### 2. **Probar el Sistema (Recomendado)**
+```bash
+# Probar en modo simulación primero
+./scripts/test-system.sh dry-run
+
+# Si todo se ve bien, probar en Docker
+./scripts/test-system.sh docker
+
+# Finalmente, configuración segura
+./scripts/test-system.sh safe
+```
+
+### 3. **Ejecutar Configuración Completa**
 ```bash
 # Configuración completa del sistema
 sudo ./setup.sh
 ```
 
-### 3. **Uso Avanzado**
+### 4. **Uso Avanzado**
 ```bash
 # Solo optimización del sistema
 sudo ./setup.sh -m system
@@ -65,7 +179,7 @@ sudo ./setup.sh -c config/mi_config.yaml
 
 ## 🔧 **Scripts Disponibles**
 
-### 🆕 **Script Principal **
+###  🆕  **Script Principal** 
 **Ubicación**: [`setup.sh`](setup.sh)
 
 #### Características:

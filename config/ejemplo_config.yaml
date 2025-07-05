@@ -1,16 +1,20 @@
-# Ejemplo de configuración personalizada
+# Archivo de configuración de ejemplo para pruebas
 # Copia este archivo y personalízalo según tus necesidades
 
+# Configuración general del sistema
 system:
-  distribution: "pop_os"
+  distribution: "pop_os"  # pop_os, ubuntu, debian
   backup_enabled: true
-  backup_retention_days: 7
-  log_level: "DEBUG"
+  backup_retention_days: 30
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  dry_run: false     # true para modo simulación
 
+# Configuración de herramientas de desarrollo
 development:
   python:
     enabled: true
-    versions: ["3.11", "3.12"]
+    versions: ["3.9", "3.10", "3.11"]
+    pyenv_enabled: true
     environments:
       datascience:
         enabled: true
@@ -20,43 +24,346 @@ development:
           - matplotlib
           - seaborn
           - jupyterlab
+          - scipy
+          - scikit-learn
       machine_learning:
         enabled: true
         packages:
-          - scikit-learn
           - torch
           - tensorflow
           - transformers
+          - optuna
+          - mlflow
       web_development:
         enabled: true
         packages:
-          - fastapi
-          - uvicorn
           - django
           - flask
+          - fastapi
+          - uvicorn
+          - gunicorn
+          - requests
+          - beautifulsoup4
+      data_engineering:
+        enabled: true
+        packages:
+          - apache-airflow
+          - pyspark
+          - dask
+          - vaex
+          - polars
+          - duckdb
 
   nodejs:
     enabled: true
-    versions: ["lts"]
+    versions: ["18", "20"]
+    nvm_enabled: true
     global_packages:
+      - npm
       - yarn
-      - create-react-app
+      - pnpm
       - typescript
+      - eslint
+      - prettier
 
+  docker:
+    enabled: true
+    docker_compose: true
+    docker_machine: false
+
+  databases:
+    enabled: true
+    postgresql: true
+    redis: true
+    mongodb: false
+
+# Configuración de optimización del sistema
 optimization:
   memory:
-    swappiness: 5
-    vfs_cache_pressure: 30
+    swappiness: 10
+    vfs_cache_pressure: 50
+    dirty_ratio: 15
+    dirty_background_ratio: 5
+    zram_enabled: true
+    zram_size: "4G"
+
   network:
     tcp_congestion_control: "bbr"
+    tcp_fast_open: true
+    tcp_window_scaling: true
+    tcp_timestamps: true
+    tcp_sack: true
+    tcp_fack: true
+    tcp_rmem: [4096, 87380, 16777216]
+    tcp_wmem: [4096, 65536, 16777216]
+
   power_management:
     tlp_enabled: true
     cpu_governor_ac: "performance"
     cpu_governor_bat: "powersave"
+    gpu_power_save: true
+    usb_autosuspend: true
 
+  storage:
+    trim_enabled: true
+    trim_frequency: "weekly"
+    inotify_watches: 524288
+    read_ahead_kb: 2048
+    scheduler: "mq-deadline"
+
+  kernel:
+    transparent_hugepages: "madvise"
+    swappiness: 10
+    vfs_cache_pressure: 50
+    dirty_ratio: 15
+    dirty_background_ratio: 5
+
+# Configuración de servicios del sistema
+services:
+  system:
+    # Servicios a deshabilitar
+    disable:
+      - bluetooth
+      - cups
+      - avahi-daemon
+      - snapd
+      - ModemManager
+      - NetworkManager-wait-online
+      - systemd-networkd-wait-online
+      - wpa_supplicant
+      - pppd-dns
+      - rsyslog
+      - systemd-resolved
+
+    # Servicios a habilitar
+    enable:
+      - docker
+      - tlp
+      - tlp-sleep
+      - fstrim.timer
+      - systemd-oomd
+
+# Configuración de herramientas de monitoreo
 monitoring:
-  grafana:
-    enabled: false
+  enabled: true
   tools:
     - htop
-    - iotop 
+    - iotop
+    - nethogs
+    - iftop
+    - nvtop
+    - btop
+    - glances
+
+  grafana:
+    enabled: false
+    port: 3000
+    admin_password: "admin123"
+
+# Configuración de seguridad
+security:
+  firewall:
+    enabled: true
+    ufw_enabled: true
+    default_policy: "deny"
+    allow_ssh: true
+    allow_http: false
+    allow_https: false
+
+  updates:
+    auto_update: true
+    security_updates: true
+    unattended_upgrades: true
+
+# Configuración de desarrollo específico
+development_tools:
+  editors:
+    vscode: true
+    vim: true
+    nano: true
+
+  version_control:
+    git: true
+    git_config:
+      user_name: "Tu Nombre"
+      user_email: "tu.email@ejemplo.com"
+      default_branch: "main"
+      init_default_branch: "main"
+
+  shell:
+    zsh: true
+    oh_my_zsh: true
+    powerlevel10k: false
+    plugins:
+      - git
+      - docker
+      - python
+      - node
+      - npm
+
+# Configuración de entornos de desarrollo
+environments:
+  # Entornos Python predefinidos
+  python_envs:
+    datascience:
+      name: "ds"
+      description: "Entorno para ciencia de datos"
+      packages:
+        - numpy
+        - pandas
+        - matplotlib
+        - seaborn
+        - jupyterlab
+        - scipy
+        - scikit-learn
+        - plotly
+        - bokeh
+        - streamlit
+
+    machine_learning:
+      name: "ml"
+      description: "Entorno para machine learning"
+      packages:
+        - torch
+        - tensorflow
+        - transformers
+        - optuna
+        - mlflow
+        - wandb
+        - ray
+        - dask
+        - vaex
+
+    web_development:
+      name: "web"
+      description: "Entorno para desarrollo web"
+      packages:
+        - django
+        - flask
+        - fastapi
+        - uvicorn
+        - gunicorn
+        - requests
+        - beautifulsoup4
+        - selenium
+        - pytest
+
+  # Entornos Node.js predefinidos
+  nodejs_envs:
+    frontend:
+      name: "frontend"
+      description: "Entorno para desarrollo frontend"
+      packages:
+        - react
+        - vue
+        - angular
+        - svelte
+        - typescript
+        - webpack
+        - vite
+
+    backend:
+      name: "backend"
+      description: "Entorno para desarrollo backend"
+      packages:
+        - express
+        - koa
+        - nestjs
+        - prisma
+        - typeorm
+        - jest
+        - supertest
+
+# Configuración de alias y comandos rápidos
+aliases:
+  enabled: true
+  python:
+    - "venv-ds=source ~/.virtualenvs/datascience/bin/activate"
+    - "venv-ml=source ~/.virtualenvs/machine_learning/bin/activate"
+    - "venv-web=source ~/.virtualenvs/web_development/bin/activate"
+    - "create-python-project=~/scripts/create_python_project.sh"
+
+  nodejs:
+    - "node-lts=nvm use lts/*"
+    - "node-latest=nvm use node"
+    - "create-react-app=npx create-react-app"
+    - "create-vue-app=npx @vue/cli create"
+
+  system:
+    - "sysinfo=neofetch"
+    - "sysmon=htop"
+    - "netmon=nethogs"
+    - "iomon=iotop"
+    - "gpumon=nvidia-smi"
+
+# Configuración de logs y debugging
+logging:
+  enabled: true
+  level: "INFO"
+  file: "/var/log/system_optimization.log"
+  max_size: "100M"
+  max_files: 5
+  format: "json"
+
+# Configuración de notificaciones
+notifications:
+  enabled: true
+  desktop: true
+  email: false
+  webhook: false
+  slack: false
+
+# Configuración de backup y recuperación
+backup:
+  enabled: true
+  retention_days: 30
+  compression: true
+  encryption: false
+  locations:
+    - "/root/system_backups"
+    - "/home/user/backups"
+
+# Configuración de testing
+testing:
+  enabled: true
+  frameworks:
+    python:
+      - pytest
+      - unittest
+      - nose2
+    nodejs:
+      - jest
+      - mocha
+      - cypress
+    system:
+      - bats
+      - shunit2
+
+# Configuración de CI/CD
+ci_cd:
+  enabled: false
+  tools:
+    - github_actions
+    - gitlab_ci
+    - jenkins
+    - drone
+
+# Configuración de documentación
+documentation:
+  enabled: true
+  tools:
+    - sphinx
+    - mkdocs
+    - docusaurus
+    - storybook
+
+# Configuración de deployment
+deployment:
+  enabled: false
+  platforms:
+    - docker
+    - kubernetes
+    - heroku
+    - aws
+    - gcp
+    - azure 
